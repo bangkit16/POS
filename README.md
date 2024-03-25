@@ -19,16 +19,16 @@ CRUD User Sederhana
 
 # Pertemuan 5
 
-**Tugas Praktikum**
+**Tugas Praktikum** <br/>
 ![image](https://github.com/bangkit16/POS/assets/81848390/f93dfd8a-03e3-431d-a2e6-8c106182d669)
 
-1. Tambahkan button Add di halam manage kategori, yang mengarah ke create kategori baru
+1. Tambahkan button Add di halam manage kategori, yang mengarah ke create kategori baru<br/>
    ![image](https://github.com/bangkit16/POS/assets/81848390/8cee2f8d-1863-4edb-ad22-dfa399ba7bad)
-2. Tambahkan menu untuk halaman manage kategori, di daftar menu navbar
+2. Tambahkan menu untuk halaman manage kategori, di daftar menu navbar <br/>
    ![image](https://github.com/bangkit16/POS/assets/81848390/e4b5e94d-5cec-4ace-9323-a713a7b34e18)
-3. Tambahkan action edit di datatables dan buat halaman edit serta controllernya
+3. Tambahkan action edit di datatables dan buat halaman edit serta controllernya <br/>
    ![image](https://github.com/bangkit16/POS/assets/81848390/368cd6cc-145e-42be-a8a5-0acb327d712d)
-4. Tambahkan action delete di datatables serta controllernya
+4. Tambahkan action delete di datatables serta controllernya <br/>
    ![image](https://github.com/bangkit16/POS/assets/81848390/49503b62-54c8-47e6-b462-b1a51d533e67)
 
 
