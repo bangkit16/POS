@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layouts.app')
 
 
 @section('subtitle' , 'Kategori')
@@ -18,8 +18,13 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="kodeKategori">Kode Kategori</label>
-                    <input type="text" name="kodeKategori" id="kodeKategori" class="form-control" placeholder="Kode Kategori">
+                    <input type="text" name="kodeKategori" id="kodeKategori" class="form-control @error('kategori_kode') is-invalid @enderror" placeholder="Kode Kategori">
                 </div>
+                {{-- @error('kategori_kode')
+                    <div class="alert alert-danger">
+                        {{$message}}
+                    </div>
+                @enderror --}}
                 <div class="form-group">
                     <label for="namaKategori">Nama Kategori</label>
                     <input type="text" name="namaKategori" id="namaKategori" class="form-control" placeholder="Nama Kategori">
@@ -31,6 +36,17 @@
             </div>
         </form>
     </div>
+</div>
+{{-- @if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{$error}}</li>
+        @endforeach
+    </ul>
+</div>
+@endif --}}
+
 </div>
 @endsection
 
