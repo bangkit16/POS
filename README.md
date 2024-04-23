@@ -31,4 +31,31 @@ CRUD User Sederhana
 4. Tambahkan action delete di datatables serta controllernya <br/>
    ![image](https://github.com/bangkit16/POS/assets/81848390/49503b62-54c8-47e6-b462-b1a51d533e67)
 
+# Pertemuan 7
+** Praktikum **
+![image](https://github.com/bangkit16/POS/assets/81848390/d9c6bb86-ccdc-4fdf-b699-5152b21580f2)
+
+** Pertanyaan **
+Jawablah pertanyaan berikut sesuai pemahaman materi di atas
+1. Apa perbedaan frontend template dengan backend template?
+   Jawab :
+   1. Frontend Template: Ini adalah template yang digunakan untuk mendesain tampilan yang akan dilihat dan diinteraksi oleh pengguna. Biasanya melibatkan HTML, CSS, dan JavaScript. Frontend template berfokus pada estetika, UX (User Experience), dan interaktivitas.
+   2. Backend Template: Ini adalah template yang digunakan untuk mendesain struktur dan fungsi dari server-side aplikasi web. Backend template biasanya melibatkan bahasa pemrograman seperti PHP, Python, Java, dll., dan berfokus pada logika bisnis, manipulasi data, dan interaksi dengan database.
+2. Apakah layouting itu penting dalam membangun sebuah website?
+   Jawab :
+   Layouting sangat penting dalam membangun sebuah website. Layout yang baik dapat membantu pengguna memahami konten dan fungsi situs dengan lebih baik. Selain itu, layout yang baik juga dapat meningkatkan estetika situs dan membuatnya lebih menarik bagi pengguna.
+3. Jelaskan fungsi dari komponen laravel blade berikut : @include(), @extend(), @section(), @push(), @yield(), dan @stack()
+   Jawab :
+   <ul>
+       <li>@include(): Digunakan untuk menyertakan file blade lain ke dalam view. Ini membantu dalam mengorganisir view dan menghindari duplikasi kode.</li> 
+       <li>@extend(): Digunakan untuk mewarisi layout dari file blade lain. Ini membantu dalam membuat layout dasar yang dapat digunakan oleh banyak view.</li> 
+       <li>@section(): Digunakan untuk mendefinisikan bagian konten yang dapat diisi dalam layout yang diperluas.</li> 
+       <li>@push(): Digunakan untuk menambahkan konten ke tumpukan yang telah ditentukan. Ini sangat berguna untuk menambahkan beberapa bagian script atau style ke bagian tertentu dari layout.</li> 
+       <li>@yield(): Digunakan dalam layout untuk menampilkan konten dari bagian yang telah ditentukan.</li> 
+       <li>@stack(): Digunakan dalam layout untuk menampilkan semua konten yang telah ditambahkan ke tumpukan tertentu.</li> 
+   </ul>
+4. Apa fungsi dan tujuan dari variable $activeMenu ?
+   jawab :
+   Digunakan untuk melacak menu atau item navigasi yang saat ini aktif pada sebuah website. 
+   
 
