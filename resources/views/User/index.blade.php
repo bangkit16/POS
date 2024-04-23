@@ -34,6 +34,8 @@
                     <th>Username</th>
                     <th>Nama</th>
                     <th>Level Pengguna</th>
+                    <th>Status</th>
+                    <th>Gambar</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -44,10 +46,29 @@
 @push('css')
 @endpush
 @push('js')
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+
 <script>
 $(document).ready(function() {
     var dataUser = $('#table_user').DataTable({
+        pageLength: 25,
+        processing: true,
+
         serverSide: true, // serverSide: true, jika ingin menggunakan server side processing
+
+        dom: '<"html5buttons">Bfrtip',
+        language: {
+            buttons: {
+                colvis : 'show / hide', // label button show / hide colvisRestore: "Reset Kolom" //lael untuk reset kolom ke default
+            }
+        },
+         
         ajax: {
             "url": "{{url('user/list') }}",
             "dataType": "json",
@@ -78,10 +99,32 @@ $(document).ready(function() {
                 orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
                 searchable: false // searchable: true, jika ingin kolom ini bisa dicari
             },{
+                data: "status", 
+                className: "",
+                orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                searchable: true ,// searchable: true, jika ingin kolom ini bisa dicari
+                render: function (data) {
+                    if(data == 1){
+                        return '<span class="badge bg-success">Accepted</span>';
+                    }else{
+                        return '<span class="badge bg-secondary">Unaccepted</span>';
+                    }
+                }
+            },{
+                data: "image", 
+                className: "",
+                orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                searchable: true ,// searchable: true, jika ingin kolom ini bisa dicari
+                render: function (data) {
+                    var url = '/storage/' + data;
+                    return '<img src="' + url + '" class="img-thumbnail" >';
+                }
+            },{
                 data: "aksi", 
                 className: "",
                 orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
-                searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+                searchable: false, // searchable: true, jika ingin kolom ini bisa dicari
+                exportable:false
             }   
         ]
     });

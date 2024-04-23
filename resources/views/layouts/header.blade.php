@@ -7,9 +7,22 @@
       <li class="nav-item d-none d-sm-inline-block">
         {{-- <a href="../../index3.html" class="nav-link">Home</a> --}}
       </li>
+      @auth
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <span class="nav-link">Welcome back, {{ auth()->user()->nama}}</span>
       </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <form action="/logout" method="post">
+          @csrf
+          <button type="submit" class="btn btn-secondary ">Logout</button>
+        
+        </form>
+      </li>
+      @else
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="/login" class="nav-link">Login</a>
+      </li>
+      @endauth
     </ul>
 
     <!-- Right navbar links -->

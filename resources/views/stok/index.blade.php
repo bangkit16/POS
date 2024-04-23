@@ -4,7 +4,7 @@
     <div class="card-header">
         <h3 class="card-title">{{ $page->title }}</h3>
         <div class="card-tools">
-            <a class="btn btn-sm btn-primary mt-1" href="{{ url('kategori/create') }}">Tambah</a>
+            <a class="btn btn-sm btn-primary mt-1" href="{{ url('stok/create') }}">Tambah</a>
         </div>
     </div>
     <div class="card-body">
@@ -15,13 +15,26 @@
             <div class="alert alert-danger">{{session('error')}}</div>
         @endif
             
-        
-        <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori">
+        <div class="row">
+            <label class="col-1 control-label col-form-label">Filter:</label>
+            <div class="col-3">
+              <select class="form-control" id="barang_id" name="barang_id" required>
+                <option value="">- Semua -</option>
+                @foreach ($barang as $item)
+                <option value="{{$item->barang_id}}">{{$item->barang_nama}}</option>
+                @endforeach
+              </select>
+              <small class="form-text text-muted">barang stok</small>
+            </div>
+          </div>
+        <table class="table table-bordered table-striped table-hover table-sm" id="table_stok">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Kategori Kode</th>
-                    <th>Kategori Nama</th>
+                    <th>Nama Barang</th>
+                    <th>Nama User</th>
+                    <th>Stok Tanggal</th>
+                    <th>Stok Jumlah</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -34,12 +47,15 @@
 @push('js')
 <script>
 $(document).ready(function() {
-    var dataKategori = $('#table_kategori').DataTable({
+    var datastok = $('#table_stok').DataTable({
         serverSide: true, // serverSide: true, jika ingin menggunakan server side processing
         ajax: {
-            "url": "{{url('kategori/list') }}",
+            "url": "{{url('stok/list') }}",
             "dataType": "json",
             "type": "POST", 
+            "data" : function (d){
+                d.barang_id = $('#barang_id').val();
+            }
         },
         columns: [
             {
@@ -48,12 +64,22 @@ $(document).ready(function() {
                 orderable: false,
                 searchable: false
             },{
-                data: "kategori_kode", 
+                data: "barang.barang_nama", 
                 className: "",
                 orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
                 searchable: true // searchable: true, jika ingin kolom ini bisa dicari
             },{
-                data: "kategori_nama", 
+                data: "user.nama", 
+                className: "",
+                orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+            },{
+                data: "stok_tanggal", 
+                className: "",
+                orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+            },{
+                data: "stok_jumlah", 
                 className: "",
                 orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
                 searchable: true // searchable: true, jika ingin kolom ini bisa dicari
@@ -65,6 +91,9 @@ $(document).ready(function() {
             }   
         ]
     });
+    $('#barang_id').on('change', function(){
+        datastok.ajax.reload();
+    })
 });
 </script>
 @endpush 
