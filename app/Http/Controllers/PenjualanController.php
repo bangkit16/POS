@@ -28,12 +28,14 @@ class PenjualanController extends Controller
         // dd(penjualanModel::all()->toArray());
         // dd($user);
 
+        $penjualans = PenjualanModel::select('penjualan_id', 'user_id', 'penjualan_kode', 'pembeli', 'penjualan_tanggal')->with(['user', 'detail']);
+        // dd($penjualans->get());
         return view('penjualan.index', ['breadcumb' => $breadcumb, 'page' => $page, 'user' => $user, 'activeMenu' => $activeMenu]);
     }
     public function list(Request $request)
     {
         // $users = penjualanModel::all();
-        $penjualans = PenjualanModel::select('penjualan_id', 'user_id', 'penjualan_kode', 'pembeli', 'penjualan_tanggal')->with(['user', 'user']);
+        $penjualans = PenjualanModel::select('penjualan_id', 'user_id', 'penjualan_kode', 'pembeli', 'penjualan_tanggal')->with(['user' ,'detail']);
         // dd(penjualanModel::all()->toJson());
         if ($request->user_id) {
             $penjualans->where('user_id', $request->user_id);
@@ -49,19 +51,31 @@ class PenjualanController extends Controller
                 //     url('/penjualan/' . $penjualan->penjualan_id) . '">'
                 //     . csrf_field() . method_field('DELETE') .
                 //     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakit menghapus data ini?\');">Hapus</button></form>';
-                return $btn;    
+                return $btn;
             })
-            ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html
+            ->addColumn('harga', function ($penjualan) { // menambahkan kolom aksi
+
+                $harga = $penjualan->detail->sum('harga');
+                return $harga;
+            })
+            ->rawColumns(['aksi' , 'harga']) // memberitahu bahwa kolom aksi adalah html
             ->make(true);
     }
     public function show(string $id)
     {
         $penjualan = PenjualanModel::with('user')->find($id);
 
-        // $penjualanDetail = DetailPenjualanModel::with('barang')->where('penjualan_id' , $id)->get();
+        $penjualanDetail = DetailPenjualanModel::with('barang')->where('penjualan_id', $id)->get();
+
+        // foreach ($penjualanDetail as $detail) {
+        //     echo 'Nama Barang: ' . $detail->barang->barang_nama . ', Harga: ' . $detail->harga . '<br>';
+        // }
+
+        // dd($penjualanDetail::harga);
+
 
         // dd($penjualanDetail->get());
-        
+
         // $detail = $penjualanDetail[]
 
         // dd($penjualanDetail[0]->penjualan_id);
@@ -87,7 +101,7 @@ class PenjualanController extends Controller
             'breadcumb' => $breadcumb,
             'page' => $page,
             'penjualan' => $penjualan,
-            // 'detail' => $penjualanDetail,
+            'detail' => $penjualanDetail,
             'activeMenu' => $activeMenu
         ]);
     }

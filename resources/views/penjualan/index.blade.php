@@ -35,6 +35,7 @@
                     <th>Kode Penjualan</th>
                     <th>Pembeli</th>
                     <th>Penjualan Tanggal</th>
+                    <th>Harga</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -83,6 +84,11 @@ $(document).ready(function() {
                 className: "",
                 orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
                 searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+            },{
+                data: "harga", 
+                className: "",
+                orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                searchable: false // searchable: true, jika ingin kolom ini bisa dicari
             },{
                 data: "aksi", 
                 className: "",

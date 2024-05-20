@@ -34,6 +34,17 @@
                     <th>Tanggal</th> 
                     <td>{{ $penjualan->penjualan_tanggal }}</td> 
                 </tr> 
+                <tr> 
+                    <th>Detail</th> 
+                    <td>
+                        <table class="table table-bordered table-striped table-hover table-sm">
+                            <tr><th>Barang</th><th>Harga</th><th>Jumlah</th></tr>
+                            @foreach ($detail as $d)
+                                <tr><td>{{$d->barang->barang_nama}}</td><td>{{$d->harga}}</td><td>{{$d->jumlah}}</td></tr>
+                            @endforeach
+                        </table>
+                    </td> 
+                </tr> 
                 
                 
                 {{-- <tr> 
