@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BarangModel;
 use App\Models\DetailPenjualanModel;
 use App\Models\PenjualanModel;
 use App\Models\UserModel;
@@ -32,10 +33,73 @@ class PenjualanController extends Controller
         // dd($penjualans->get());
         return view('penjualan.index', ['breadcumb' => $breadcumb, 'page' => $page, 'user' => $user, 'activeMenu' => $activeMenu]);
     }
+    public function create()
+    {
+        $breadcumb = (object) [
+            'title' => 'Tambah penjualan',
+            'list' => ['Home', 'penjualan', 'Tambah']
+        ];
+        $page = (object) [
+            'title' => 'Tambah penjualan baru'
+        ];
+
+        $barang = BarangModel::all();
+        $user = UserModel::all();
+
+        $activeMenu = 'penjualan';
+
+        return view('penjualan.create', ['breadcumb' => $breadcumb, 'page' => $page, 'barang' => $barang, 'user' => $user, 'activeMenu' => $activeMenu]);
+    }
+
+    public function store(Request $request)
+    {
+        // dd($request->member);
+        $validated = $request->validate([
+            //username harus diisi, berupa string, minimal 3 karakter dan bernilai unik di table m_user kolom username
+            'pembeli' => 'required|string',
+            'member' => 'required|integer',
+            'penjualan_kode' => 'required',
+            // 'barang' => 'required|integer',
+            // 'jumlah' => 'required|integer',
+            // 'total' => 'required|integer',
+        ]);
+        // dd($validated['member']);
+        $validated['user_id'] = auth()->user()->user_id;
+        $validated['penjualan_tanggal'] = now();
+        $validated['harga'] = $request['total'];
+        // $validated['member'] = $request['member'];
+
+        
+        $id = PenjualanModel::create($validated);
+        // dd($id->get());
+
+        for ($i = 0; $i < count($request->barang); $i++) {
+            # code...
+            // dump('j');
+            DetailPenjualanModel::create([
+                'penjualan_id' => $id->penjualan_id,
+                'barang_id' => $request->barang[$i],
+                'harga' => $request->total[$i],
+                'jumlah' => $request->jumlah[$i],
+            ]);
+        }
+        // dd("hop");
+
+
+
+        // stokModel::create([
+        //     'username' => $request->username,
+        //     'nama' => $request->nama,
+        //     'password' => bcrypt($request->password),
+        //     'level_id' => $request->level_id
+        // ]);
+
+        return redirect('/penjualan')->with('success', 'Data penjualan berhasil disimpan');
+    }
     public function list(Request $request)
     {
         // $users = penjualanModel::all();
-        $penjualans = PenjualanModel::select('penjualan_id', 'user_id', 'penjualan_kode', 'pembeli', 'penjualan_tanggal')->with(['user' ,'detail']);
+        $penjualans = PenjualanModel::select('penjualan_id', 'user_id', 'penjualan_kode', 'pembeli', 'member', 'penjualan_tanggal')->with(['user', 'detail']);
         // dd(penjualanModel::all()->toJson());
         if ($request->user_id) {
             $penjualans->where('user_id', $request->user_id);
@@ -58,7 +122,13 @@ class PenjualanController extends Controller
                 $harga = $penjualan->detail->sum('harga');
                 return $harga;
             })
-            ->rawColumns(['aksi' , 'harga']) // memberitahu bahwa kolom aksi adalah html
+            ->addColumn('harga_bayar', function ($penjualan) { // menambahkan kolom aksi
+                if ($penjualan->member == 1)
+                    $harga = ($penjualan->detail->sum('harga') * 90) / 100;
+                else $harga = $penjualan->detail->sum('harga');
+                return $harga;
+            })
+            ->rawColumns(['aksi', 'harga', 'harga_bayar']) // memberitahu bahwa kolom aksi adalah html
             ->make(true);
     }
     public function show(string $id)

@@ -23,13 +23,24 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-2">
+            
+            <div class="col-8">
+                
+                <div class="p-6 m-20 bg-white rounded shadow">
+                    {!! $chartP->container() !!}
+                </div>
+            </div>
+        </div>
         @endcan
         
     </div>
 </div>
 <script src="{{ $chartD->cdn() }}"></script>
 <script src="{{ $chartB->cdn() }}"></script>
+<script src="{{ $chartP->cdn() }}"></script>
 
 {{ $chartD->script() }}
+{{ $chartP->script() }}
 {{ $chartB->script() }}
 @endsection

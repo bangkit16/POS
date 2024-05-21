@@ -9,6 +9,7 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\POSController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SalesForecastController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -104,7 +105,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => ['acc']], function () {
     Route::delete('/{id}', [PenjualanController::class, 'destroy']);
 });
 
-
+Route::get('/forecast', [SalesForecastController::class, 'forecast']);
 // Route::get('/level', [KategoriController::class, 'index']);
 
 

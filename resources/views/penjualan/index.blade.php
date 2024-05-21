@@ -4,7 +4,7 @@
     <div class="card-header">
         <h3 class="card-title">{{ $page->title }}</h3>
         <div class="card-tools">
-            {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ url('penjualan/create') }}">Tambah</a> --}}
+            <a class="btn btn-sm btn-primary mt-1" href="{{ url('penjualan/create') }}">Tambah</a>
         </div>
     </div>
     <div class="card-body">
@@ -36,6 +36,8 @@
                     <th>Pembeli</th>
                     <th>Penjualan Tanggal</th>
                     <th>Harga</th>
+                    <th>Status Member</th>
+                    <th>Harga Bayar</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -86,6 +88,23 @@ $(document).ready(function() {
                 searchable: true // searchable: true, jika ingin kolom ini bisa dicari
             },{
                 data: "harga", 
+                className: "",
+                orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+            },{
+                data: "member", 
+                className: "",
+                orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                searchable: true ,// searchable: true, jika ingin kolom ini bisa dicari
+                render: function (data) {
+                    if(data == 1){
+                        return '<span class="badge bg-success">Member</span>';
+                    }else{
+                        return '<span class="badge bg-secondary">non Member</span>';
+                    }
+                }
+            },{
+                data: "harga_bayar", 
                 className: "",
                 orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
                 searchable: false // searchable: true, jika ingin kolom ini bisa dicari
