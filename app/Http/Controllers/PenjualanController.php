@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BarangModel;
 use App\Models\DetailPenjualanModel;
 use App\Models\PenjualanModel;
+use App\Models\StokModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -53,6 +54,7 @@ class PenjualanController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->penjualan_kode);
         // dd($request->member);
         $validated = $request->validate([
             //username harus diisi, berupa string, minimal 3 karakter dan bernilai unik di table m_user kolom username
@@ -81,6 +83,10 @@ class PenjualanController extends Controller
                 'barang_id' => $request->barang[$i],
                 'harga' => $request->total[$i],
                 'jumlah' => $request->jumlah[$i],
+            ]);
+            $barang = StokModel::where('barang_id',$request->barang[$i])->first();
+            $barang->update([
+                'stok_jumlah' => $barang->stok_jumlah - $request->jumlah[$i],
             ]);
         }
         // dd("hop");
@@ -113,7 +119,7 @@ class PenjualanController extends Controller
                 // $btn .= '<a href="' . url('/penjualan/' . $penjualan->penjualan_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
                 // $btn .= '<form class="d-inline-block" method="POST" action="' .
                 //     url('/penjualan/' . $penjualan->penjualan_id) . '">'
-                //     . csrf_field() . method_field('DELETE') .
+                //     . csrf_field() . method_field('DELETE') .p
                 //     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakit menghapus data ini?\');">Hapus</button></form>';
                 return $btn;
             })

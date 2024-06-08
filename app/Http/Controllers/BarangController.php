@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
+use App\Models\StokModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class BarangController extends Controller
@@ -32,7 +34,7 @@ class BarangController extends Controller
     public function list(Request $request)
     {
         // $users = BarangModel::all();
-        $barangs = BarangModel::select('barang_id', 'barang_kode', 'barang_nama', 'harga_jual', 'harga_beli', 'kategori_id')->with('kategori');
+        $barangs = BarangModel::select('barang_id', 'barang_kode', 'barang_nama', 'harga_jual', 'harga_beli', 'kategori_id', 'image')->with('kategori');
         // dd(BarangModel::all()->toJson());
         if ($request->kategori_id) {
             $barangs->where('kategori_id', $request->kategori_id);
@@ -73,18 +75,29 @@ class BarangController extends Controller
 
     public function store(Request $request)
     {
+        
         $validated = $request->validate([
             //username harus diisi, berupa string, minimal 3 karakter dan bernilai unik di table m_user kolom username
             'barang_kode' => 'required|unique:m_barang|min:3',
             'barang_nama' => 'required|string|max:100',
             'harga_jual' => 'required|integer',
             'harga_beli' => 'required|integer',
-            'kategori_id' => 'required|integer'
+            'kategori_id' => 'required|integer',
+            'image' => 'image|nullable'
         ]);
 
+        if ($request->file('image')) {
+            $validated['image'] = $request->file('image')->store('barangimage');
+        }
         // dd($validated);
 
-        BarangModel::create($validated);
+        $id = BarangModel::create($validated);
+        StokModel::create([
+            'barang_id' => $id->barang_id,
+            'user_id' => auth()->user()->user_id,
+            'stok_tanggal' => now(),
+            'stok_jumlah' => 100,
+        ]);
 
         // BarangModel::create([
         //     'username' => $request->username,
@@ -145,6 +158,7 @@ class BarangController extends Controller
 
     public function update(Request $request, string $id)
     {
+        // dd($request->image);
         $validated = $request->validate([
             // 'username' => 'required|string|min:3|unique:m_user,username,' . $id . ',user_id',
             // 'nama' => 'required|string|max:100',
@@ -154,10 +168,30 @@ class BarangController extends Controller
             'barang_nama' => 'required|string|max:100',
             'harga_jual' => 'required|integer',
             'harga_beli' => 'required|integer',
-            'kategori_id' => 'required|integer'
+            'kategori_id' => 'required|integer',
+            'image' => 'nullable',
         ]);
 
-        BarangModel::find($id)->update($validated);
+        // $image = null;
+
+        if (!empty($request->image)) {
+            if (BarangModel::find($id)->image) {
+                Storage::delete(BarangModel::find($id)->image);
+            }
+            $validated['image'] = $request->file('image')->store('barangimage');
+            BarangModel::find($id)->update([
+                'image' => $validated['image']
+            ]);
+        }
+        // $validated['image'] = null;
+
+        BarangModel::find($id)->update([
+            'barang_kode' => $validated['barang_kode'],
+            'barang_nama' => $validated['barang_nama'] ,
+            'harga_jual' => $validated['harga_jual'] ,
+            'harga_beli' => $validated['harga_beli'] ,
+            'kategori_id' => $validated['kategori_id'] ,
+        ]);
 
         // BarangModel::find($id)->update([
         //     'username' => $request->username,

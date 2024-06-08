@@ -33,7 +33,7 @@ class StokController extends Controller
     public function list(Request $request)
     {
         // $users = stokModel::all();
-        $stoks = StokModel::select('stok_id','barang_id', 'user_id', 'stok_tanggal' , 'stok_jumlah')->with(['barang' , 'user']);
+        $stoks = StokModel::select('stok_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah')->with(['barang', 'user']);
         // dd(stokModel::all()->toJson());
         if ($request->barang_id) {
             $stoks->where('barang_id', $request->barang_id);
@@ -70,22 +70,33 @@ class StokController extends Controller
 
         $activeMenu = 'stok';
 
-        return view('stok.create', ['breadcumb' => $breadcumb, 'page' => $page, 'barang' => $barang,'user' => $user, 'activeMenu' => $activeMenu]);
+        return view('stok.create', ['breadcumb' => $breadcumb, 'page' => $page, 'barang' => $barang, 'user' => $user, 'activeMenu' => $activeMenu]);
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             //username harus diisi, berupa string, minimal 3 karakter dan bernilai unik di table m_user kolom username
-            'barang_id' => 'required|integer', 
-            'user_id' => 'required|integer', 
-            'stok_tanggal' => 'required' , 
+            'barang_id' => 'required|integer',
+            // 'user_id' => 'required|integer', 
+            // 'stok_tanggal' => 'required' , 
             'stok_jumlah' => 'required|integer'
         ]);
 
         // dd($validated);
+        $user = $validated['user_id'] = auth()->user()->user_id;
+        $tgl = $validated['stok_tanggal'] = now();
 
-        StokModel::create($validated);
+        $stok = StokModel::where('barang_id' , $validated['barang_id'])->first();
+        // dd($stok);
+
+        $stok->update([
+            'stok_jumlah' => $stok->stok_jumlah + $validated['stok_jumlah'],
+            'stok_tanggal' => $tgl,
+            'user_id' => $user
+        ]);
+
+        // StokModel::create($validated);
 
         // stokModel::create([
         //     'username' => $request->username,
@@ -153,9 +164,9 @@ class StokController extends Controller
             // 'nama' => 'required|string|max:100',
             // 'password' => 'nullable|min:5',
             // 'level_id' => 'required|integer',
-            'barang_id' => 'required|integer', 
-            'user_id' => 'required|integer', 
-            'stok_tanggal' => 'required' , 
+            'barang_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'stok_tanggal' => 'required',
             'stok_jumlah' => 'required|integer'
         ]);
 

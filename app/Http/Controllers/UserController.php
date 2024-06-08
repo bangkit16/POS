@@ -54,6 +54,12 @@ class UserController extends Controller
                         url('/user/acc/' . $user->user_id) . '">'
                         . csrf_field() . method_field('PUT') .
                         '<button type="submit" class="ml-1 btn btn-primary btn-sm" onclick="return confirm(\'Apakah Anda yakin konfirmasi user ini?\');">Accept</button></form>';
+                } else {
+                    $btn .= '<form class="d-inline-block" method="POST" action="' .
+                        url('/user/unacc/' . $user->user_id) . '">'
+                        . csrf_field() . method_field('PUT') .
+                        '<button type="submit" class="ml-1 btn btn-secondary btn-sm" onclick="return confirm(\'Apakah Anda yakin batal konfirmasi user ini?\');">Unaccept</button></form>';
+                
                 }
                 return $btn;
             })
@@ -80,6 +86,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request)
         $validated = $request->validate([
             //username harus diisi, berupa string, minimal 3 karakter dan bernilai unik di table m_user kolom username
             'username' => 'required|string|min:3|unique:m_user,username',
@@ -163,7 +170,9 @@ class UserController extends Controller
 
 
         if (!empty($request->image)) {
-            Storage::delete(UserModel::find($id)->image);
+            if (UserModel::find($id)->image) {
+                Storage::delete(UserModel::find($id)->image);
+            }
             $validated['image'] = $request->file('image')->store('images');
             UserModel::find($id)->update([
                 'image' => $validated['image']
@@ -189,6 +198,15 @@ class UserController extends Controller
             'status' => 1,
         ]);
         return redirect('/user')->with('success', 'User berhasil dikonfirmasi');
+    }
+    public function unacc(string $id)
+    {
+
+        // dd($id);
+        UserModel::find($id)->update([
+            'status' => 0,
+        ]);
+        return redirect('/user')->with('success', 'User berhasil ditolak');
     }
     public function destroy(string $id)
     {

@@ -195,17 +195,20 @@ class SalesForecastController extends Controller
                 $averageSales = array_sum(array_slice($dailySales, -6, 6, true)) / 6;
 
                 // Prediksi penjualan untuk hari ini berdasarkan rata-rata 6 hari sebelumnya
-                $predictedSales[$startDate->toDateString()] = $averageSales;
+                $predictedSales[$startDate->toDateString()] = round($averageSales,3);
 
                 // Maju ke hari berikutnya
                 $startDate->addDay();
 
                 // Tambahkan penjualan hari ini ke data penjualan
                 $dailySales[$startDate->toDateString()] = $averageSales;
+
+                // $angka = 123.4567890123;
+                // $predictedSales = number_format($predictedSales, 3);
             }
 
             // Simpan prediksi per barang
-            $predictedSalesPerBarang[$barang_id] = $predictedSales;
+            $predictedSalesPerBarang[$barang_id] =  $predictedSales;
         }
         // dd($predictedSalesPerBarang);
 

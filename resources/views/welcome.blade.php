@@ -7,7 +7,7 @@
         <div class="card-tools"></div>
     </div>
     <div class="card-body">
-        @can('admin')
+        {{-- @can('admin') --}}
             
         <div class="row">
             <div class="col-4">
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        @endcan
+        {{-- @endcan --}}
         
     </div>
 </div>

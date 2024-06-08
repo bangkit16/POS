@@ -47,6 +47,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'admin'], function () {
     Route::get('/{id}/edit', [UserController::class, 'edit']);
     Route::put('/{id}', [UserController::class, 'update']);
     Route::put('/acc/{id}', [UserController::class, 'acc']);
+    Route::put('/unacc/{id}', [UserController::class, 'unacc']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
